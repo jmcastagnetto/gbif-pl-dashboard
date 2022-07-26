@@ -1,5 +1,6 @@
 ui <- dashboardPage(
   skin = "green",
+  title = "Biodiversity Observations in Poland",
   header = dashboardHeader(
     title = "Biodiversity Observations in Poland",
     titleWidth = 450
