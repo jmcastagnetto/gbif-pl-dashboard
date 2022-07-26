@@ -1,0 +1,6 @@
+#! /bin/bash
+
+zip -9 ../for-deployment.zip about.md sources.md global.R ui.R server.R data/* R/*
+scp -i <path/to/aws-key.pem> ../for-deployment.zip  ubuntu@<instance-ip>:/home/ubuntu/tmp
+ssh -i <path/to/aws-key.pem> ubuntu@<instance-ip>
+
