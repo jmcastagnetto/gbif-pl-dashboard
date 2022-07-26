@@ -206,10 +206,10 @@ I decided to use nginx for revese-proxying the Shiny server:
 $ sudo apt install nginx
 ```
 
-*** Configuration**
+**Configuration**
 
 
-`/etc/nginx/nginx.conf` (Websocket reverse proxy)
+Set Websocket reverse proxy support: `/etc/nginx/nginx.conf`
 
 ```
 ...
@@ -221,7 +221,7 @@ $ sudo apt install nginx
 ...
 ```
 
-`/etc/nginx/sites-enabled/default` (default site)
+Default site: `/etc/nginx/sites-enabled/default`
 
 ```
 server {
@@ -252,7 +252,7 @@ I've created two scripts:
   - Restarts the Shiny server
   - Restarts Nginx
 
-This repository contains a template for one of the scripts [`deploy-app.sh_template`](deploy_app.sh_template), which needs to be edited to include the appropriate credentials and server IP/name.
+This repository contains a template for one of the scripts [`deploy-app.sh_template`](deploy-app.sh_template), which needs to be edited to include the appropriate credentials and server IP/name.
 
 The script [`deploy.sh`](for_server/deploy.sh) is also included for simplicity.
 
