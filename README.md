@@ -162,7 +162,7 @@ After this, I restarted the instance, and made not the new assigned IP and name,
 
 ### Installation of R and R packages
 
-For installation of R and the needed packges, I used Dirk Eddelbuettel's `r2u` project (https://github.com/eddelbuettel/r2u), which makes is simpler the installation, even in small server instances (like the one I am using).
+For installation of R and the needed packges, I used Dirk Eddelbuettel's `r2u` project (https://github.com/eddelbuettel/r2u), which makes it simpler to install R and packages (including upgrades), even in small server instances like the one I am using.
 
 Below is a simplified version of the process:
 

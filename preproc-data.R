@@ -1,10 +1,9 @@
-suppressPackageStartupMessages(library(tidyverse))
-suppressPackageStartupMessages(library(glue))
+library(tidyverse)
+library(glue)
 
 # Download zip file from GBIF ---------------------------------------------
 
 if (!file.exists("tmp/0399802-210914110416597.zip")) {
-  cat("Downloading data from GBIF\n")
   download.file(
     "https://api.gbif.org/v1/occurrence/download/request/0399802-210914110416597.zip",
     "tmp/0399802-210914110416597.zip",
@@ -14,7 +13,6 @@ if (!file.exists("tmp/0399802-210914110416597.zip")) {
 
 # Process the images for the entries that have them -----------------------
 
-cat("Obtaining image URLs from metadata\n")
 # use the first image only
 media <- read_tsv(
   unz(
@@ -35,7 +33,6 @@ media <- read_tsv(
 
 # Generate the main datasets ----------------------------------------------
 
-cat("Processing the observations data, augmented with image URLs\n")
 raw_df <- read_tsv(
   unz(
     "tmp/0399802-210914110416597.zip",
@@ -71,7 +68,11 @@ pl_df <- raw_df %>%
         vernacularName
       ) %>%
       distinct() %>%
-      filter(vernacularName != ""),
+      filter(vernacularName != "") %>%
+      group_by(scientificName) %>%
+      summarise( # collapse multiple vernacular names
+        vernacularName = paste(vernacularName, collapse = " | ")
+      ),
     by = "scientificName"
   ) %>% # add image info
   left_join(
@@ -112,7 +113,6 @@ saveRDS(
 )
 
 # Equivalencies of scientific and vernacular names
-cat("Saving the equivalencies of scientific and common names\n")
 names_df <- pl_df %>%
   select(
     scientificName,
