@@ -26,13 +26,13 @@ The images of the organisms used in the visualization, are obtained from the GBI
 
 - *Note*: The image URLs in the GBIF metadata (*vide supra*) might not include all the images that exist in the actual full reports. Only 7,746 reports have at least one image in the metadata (~13% of entries).
 
-For those observations without an image in the GBIF metadata, I have used the Wikimedia Commons image from at https://commons.wikimedia.org/wiki/File:No_Image_Available.jpg (Col pr, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons)
+For those observations without an image in the GBIF metadata, I have used the Wikimedia Commons image at https://commons.wikimedia.org/wiki/File:No_Image_Available.jpg (Col pr, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons)
 
 ## Shiny application
 
 ### Pre-processing of the data
 
-In order to have a simple visualization, I've decided to download the dataset up to a given date (2022-07-21), and do some pre-processing to have it ready for display in a dashboard.
+In order to have a have a clean dataset for the visualization, I've decided to download the data up to a given date (2022-07-21) and do some pre-processing to have it ready for display in a dashboard.
 
 From the downloaded ZIP file (selecting the one containing the Darwin Core metadata), I've used two files:
 
@@ -65,8 +65,8 @@ The Shiny app is composed of three main files:
     - The UI includes:
       - A Selectize-based search widget that allows for free text search and selection
       - A range slider that can be used to filter by a given year range
-      - A bar plot showing the number of individual observed per year
-      - A map showing the locations of the observations, clustering nearby observations so as not clutter the visualization.
+      - A bar plot showing the number of individuals observed per year
+      - A map showing the locations of the observations, clustering nearby observations so as to not clutter the visualization.
         - The map has, by default `CartoDB.Positron` tiles which are a bit subdued, with the possibility of selecting a more detailed set of tiles: `OpenStreetMap`
         - Also, the map is purposedly limiting the zoom to level 6, which is about country level, to avoid users zooming out too far.
   - On the sidebar there are three tabs/sections:
@@ -74,11 +74,11 @@ The Shiny app is composed of three main files:
     - A short about page
     - Information about the sources of the data and images.
 - `server.R`: the processing logic for the Application
-  - This makes use of the `gbifServer()} function defined in the module `R/mod_gbif.R`
+  - This makes use of the `gbifServer()` function defined in the module `R/mod_gbif.R`
     - The aforementioned function, takes care of:
-      - Updating the list of options used in the
-      - Extracting the appropriate input values
-      - Updating the bar plot and the map locations
+      - Updating the list of options used in the Selectize-based widget
+      - Obtaining the appropriate input values
+      - In response to the input, updating the bar plot and the markers in the map
 
 The plotting functions used by the module mentioned above, are defined in `R/barplot_by_sciname.R` and `R/plot_org_map.R`
 
@@ -158,11 +158,11 @@ $ sudo apt install byobu
 $ byobu-enable
 ```
 
-After this, I restarted the instance, and made not the new assigned IP and name, which will be used in the rest of the configuration.
+After this, I restarted the instance, and made note of the new assigned IP and name, which will be used in the rest of the configuration.
 
 ### Installation of R and R packages
 
-For installation of R and the needed packges, I used Dirk Eddelbuettel's `r2u` project (https://github.com/eddelbuettel/r2u), which makes it simpler to install R and packages (including upgrades), even in small server instances like the one I am using.
+For installation of R and the needed packages, I used Dirk Eddelbuettel's `r2u` project (https://github.com/eddelbuettel/r2u), which makes it simpler to install R and packages (including upgrades), even in small server instances like the one I am using.
 
 Below is a simplified version of the process:
 
@@ -208,8 +208,7 @@ $ sudo apt install nginx
 
 **Configuration**
 
-
-Set Websocket reverse proxy support: `/etc/nginx/nginx.conf`
+(a) Set Websocket reverse proxy support: `/etc/nginx/nginx.conf`
 
 ```
 ...
@@ -221,7 +220,7 @@ Set Websocket reverse proxy support: `/etc/nginx/nginx.conf`
 ...
 ```
 
-Default site: `/etc/nginx/sites-enabled/default`
+(b) Default site: `/etc/nginx/sites-enabled/default`
 
 ```
 server {
@@ -264,7 +263,7 @@ I made use of one of my domains (`castagnetto.net`), and CloudFlare to be give a
 - In CloudFlare
   - Mapped using CNAME castagnetto.net -> ec2-A-B-D-D.compute-1.amazonaws.com
   - Set to:
-    - Use flexlibl SSL/TLS (between browser and CloudFlare)
+    - Use flexlible SSL/TLS (between browser and CloudFlare)
     - Always use HTTPS
     - Perform automatic HTTPS rewrites
     - Auto minify JS, CSS, HTML
@@ -276,11 +275,11 @@ Here are some enhancements/ideas to this visualization
 
 - Add a way of filtering observations by the number of individuals observed: This could help people interested in, for, example migratory birds that might be observed in medium to large groups vs the occasional single individual observations.
 
-- Normalize the scientific names: Usually the organism names follow the pattern <species/variety name> (<taxonomist>, <year>), but some of the names in the dataset lack the parenthesis or do not follow completely this pattern.
+- Normalize the scientific names: Usually the organism names follow the pattern "{species/variety name} ({taxonomist}, {year})", but some of the names in the dataset lack parentheses or do not follow fully this pattern.
 
-- Use region selections in the bar plot to filter for observations in the map: This will simplify the visualization and will no longere require the use of a range slider selector.
+- Use region selections in the bar plot to filter for observations in the map: This will simplify the visualization and will no longer require the use of a range slider selector.
 
 - Store the whole dataset (currently ~70GB uncompressed) into a format allowing easy retrieval of data by country:
-  - It could on a set of (`arrow`) parquet files partitioned by country and stored in S3, which could have undergone some simplification, normalization and augmentation to be ready for use in the visualization.
+  - It could done using a set of (`arrow`) parquet files partitioned by country and stored in S3, which could have undergone some simplification, normalization and augmentation to be ready for use in the visualization.
   - It will require adding a way of selecting a country, and then programatically loading the data on demand.
   - *Note*: tried to do something along these lines, but I gathered it will take more time (and money) than I have budgeted for this visualization, to set up something like that on AWS.
