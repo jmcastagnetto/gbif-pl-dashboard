@@ -136,7 +136,7 @@ I've used `testthat` (not in package mode) to test for the succesful creation of
 The script used to run the tests is: `run-tests.R` and the indiviual tests are in `tests/test-barplot_by_sciname.R` and `test-plot_org_map.R`
 
 
-## Application deployment
+## Application deployment (Infrastructure Skill)
 
 ### Provisioning of an AWS EC2 instance
 
