@@ -32,12 +32,12 @@ For those observations without an image in the GBIF metadata, I have used the Wi
 
 ### Pre-processing of the data
 
-In order to have a simple visualization, I've decided to donwload the dataset up to a given date (2022-07-21), and do some pre-processing to have it ready for display in a dashboard.
+In order to have a simple visualization, I've decided to download the dataset up to a given date (2022-07-21), and do some pre-processing to have it ready for display in a dashboard.
 
 From the downloaded ZIP file (selecting the one containing the Darwin Core metadata), I've used two files:
 
 - `multimedia.txt`: contains a list of the images associated with each observation
-  - From this data, I've selected the `gbifID` and `identifier` columns, which contain (respectivelly), the GBIF ID and the URL for the image associated to that observation. The `identifier` column was renamed to `img_url`, and then for each observation, only the first image (after ordering by URL) was picked.
+  - From this data, I've selected the `gbifID` and `identifier` columns, which contain (respectively), the GBIF ID and the URL for the image associated to that observation. The `identifier` column was renamed to `img_url`, and then for each observation, only the first image (after ordering by URL) was picked.
 
 - `occurrence.txt`: contains the records of each organism observation in Poland
   - From this data, I've selected the columns: `gbifID`, `identifier`,
@@ -48,9 +48,9 @@ From the downloaded ZIP file (selecting the one containing the Darwin Core metad
 
 It was observed that, in the occurrence data, any given scientific name can have one or more common (*vernacular*) names, so, in order to standardize the nomenclature, I've collapsed into a string all common names of a given scientific name, using the "pipe" character (" | ") as separator. A new column (`org_name`) was composed using the pattern `scientificName / vernacularName`, which would allow for free text search by either type of name.
 
-Also, the occurrence data was augmented with the `img_url` column, and appropiate columns for use with marker labels (`str_lbl`) and pop-ups (`popup_lbl`) were generated using the other existing fields.
+Also, the occurrence data was augmented with the `img_url` column, and appropriate columns for use with marker labels (`str_lbl`) and pop-ups (`popup_lbl`) were generated using the other existing fields.
 
-There is a shell script (`prepare-app-data.sh`) that executes the appropiate R code (in `preproc-data.R`), which generates two datasets:
+There is a shell script (`prepare-app-data.sh`) that executes the appropriate R code (in `preproc-data.R`), which generates two datasets:
 
 - `data/pl_data.rds`: the selected observations for Poland
 - `data/species_names.rds`: an equivalency table between scientific and common names for the organisms.
@@ -65,7 +65,7 @@ The Shiny app is composed of three main files:
     - The UI includes:
       - A Selectize-based search widget that allows for free text search and selection
       - A range slider that can be used to filter by a given year range
-      - A barplot showing the number of individual observered per year
+      - A bar plot showing the number of individual observed per year
       - A map showing the locations of the observations, clustering nearby observations so as not clutter the visualization.
         - The map has, by default `CartoDB.Positron` tiles which are a bit subdued, with the possibility of selecting a more detailed set of tiles: `OpenStreetMap`
         - Also, the map is purposedly limiting the zoom to level 6, which is about country level, to avoid users zooming out too far.
@@ -245,16 +245,16 @@ server {
 
 I've created two scripts:
 
-- A local one (`deploy_app.sh`) with packs all the relevant assets into a ZIP file, then copies the resulting archive (using scp) to the AWS instance, and finally opens an ssh session to the server.
+- A local one (`deploy-app.sh`) with packs all the relevant assets into a ZIP file, then copies the resulting archive (using scp) to the AWS instance, and finally opens an ssh session to the server.
 
 - One in the server (`deploy.sh`) that I can run manually at the server, that:
   - Unzips the archive in the corresponding path (`/srv/shiny-server/biodiversity-dashboard/`)
   - Restarts the Shiny server
   - Restarts Nginx
 
-This repository contains a template for one of the scripts [`deploy_app.sh_template`](deploy_app.sh_template), which needs to be edited to include the appropriate credentials and server IP/name.
+This repository contains a template for one of the scripts [`deploy-app.sh_template`](deploy_app.sh_template), which needs to be edited to include the appropriate credentials and server IP/name.
 
-The script [`deploy.sh`](for_server/deplot.sh) is also included for simplicity.
+The script [`deploy.sh`](for_server/deploy.sh) is also included for simplicity.
 
 ### Assigning a domain to the biodiversity-dashboard
 
