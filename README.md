@@ -252,7 +252,9 @@ I've created two scripts:
   - Restarts the Shiny server
   - Restarts Nginx
 
-This repository contains templates for both scripts, that need to be edited to include the appropriate credentials, server IP/name, etc.etc
+This repository contains a template for one of the scripts [`deploy_app.sh_template`](deploy_app.sh_template), which needs to be edited to include the appropriate credentials and server IP/name.
+
+The script [`deploy.sh`](for_server/deplot.sh) is also included for simplicity.
 
 ### Assigning a domain to the biodiversity-dashboard
 
