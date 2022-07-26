@@ -6,7 +6,7 @@ Current (temporary) location: https://castagnetto.net
 
 This dashboard allows anyone to explore the observation occurrences, in Poland, of diverse animals, plants and fungi.
 
-You can select the desired organism using either its scientific or common (*vernacular*) name, and then showing the year distribution of observed individual as well as the observation location on a map. There is also the capability of restricting observations to an specific range of years.
+You can select the desired organism using either its scientific or common (*vernacular*) name, and then showing the yearly distribution of observed individual, as well as the observation location on a map. There is also the capability of restricting observations to a specific range of years.
 
 Each marker in the map displays a label on mouse over, and a short description of the observation (including an image, when available).
 
@@ -32,21 +32,21 @@ For those observations without an image in the GBIF metadata, I have used the Wi
 
 ### Pre-processing of the data
 
-In order to have a have a clean dataset for the visualization, I've decided to download the data up to a given date (2022-07-21) and do some pre-processing to have it ready for display in a dashboard.
+In order to have a clean dataset for the visualization, I've decided to download the data up to a given date (2022-07-21) and do some pre-processing to have it ready for display in a dashboard.
 
 From the downloaded ZIP file (selecting the one containing the Darwin Core metadata), I've used two files:
 
 - `multimedia.txt`: contains a list of the images associated with each observation
   - From this data, I've selected the `gbifID` and `identifier` columns, which contain (respectively), the GBIF ID and the URL for the image associated to that observation. The `identifier` column was renamed to `img_url`, and then for each observation, only the first image (after ordering by URL) was picked.
 
-- `occurrence.txt`: contains the records of each organism observation in Poland
+- `occurrence.txt`: contains the records of each observation in Poland
   - From this data, I've selected the columns: `gbifID`, `identifier`,
     `occurrenceID`, `eventDate`, `year`, `month`, `day`,
     `individualCount`, `countryCode`, `locality`,
     `decimalLatitude`, `decimalLongitude`,
     `kingdom`, `vernacularName`, and `scientificName`
 
-It was observed that, in the occurrence data, any given scientific name can have one or more common (*vernacular*) names, so, in order to standardize the nomenclature, I've collapsed into a string all common names of a given scientific name, using the "pipe" character (" | ") as separator. A new column (`org_name`) was composed using the pattern `scientificName / vernacularName`, which would allow for free text search by either type of name.
+It was noted that, in the occurrence data, any given scientific name can have one or more common (*vernacular*) names, so, in order to standardize the nomenclature, I've collapsed all common names of a given scientific name into a string, using the "pipe" character (" | ") as separator. A new column (`org_name`) was composed using the pattern `scientificName / vernacularName`, which would allow for free text search by either type of name.
 
 Also, the occurrence data was augmented with the `img_url` column, and appropriate columns for use with marker labels (`str_lbl`) and pop-ups (`popup_lbl`) were generated using the other existing fields.
 
@@ -67,11 +67,11 @@ The Shiny app is composed of three main files:
       - A range slider that can be used to filter by a given year range
       - A bar plot showing the number of individuals observed per year
       - A map showing the locations of the observations, clustering nearby observations so as to not clutter the visualization.
-        - The map has, by default `CartoDB.Positron` tiles which are a bit subdued, with the possibility of selecting a more detailed set of tiles: `OpenStreetMap`
+        - The map has, by default, `CartoDB.Positron` tiles which are a bit subdued, with the possibility of selecting a more detailed set of tiles: `OpenStreetMap`
         - Also, the map is purposedly limiting the zoom to level 6, which is about country level, to avoid users zooming out too far.
   - On the sidebar there are three tabs/sections:
     - The dashboard visualization
-    - A short about page
+    - A short "about" page
     - Information about the sources of the data and images.
 - `server.R`: the processing logic for the Application
   - This makes use of the `gbifServer()` function defined in the module `R/mod_gbif.R`
@@ -84,7 +84,7 @@ The plotting functions used by the module mentioned above, are defined in `R/bar
 
 ### Reactive graph of the application (simplified)
 
-Below is a simplified view of the several reactive pieces used in this visualiazation (generated using the [Mermaid](https://mermaid-js.github.io/mermaid/) diagram language)
+Below is a simplified view of the several reactive pieces used in this visualization (generated using the [Mermaid](https://mermaid-js.github.io/mermaid/) diagram language)
 
 ```mermaid
 graph LR
@@ -198,7 +198,7 @@ I planned to put the code for the Shiny App in `/srv/shiny-server/biodiversity-d
 
 ### Installation and configuration of Nginx
 
-I decided to use nginx for revese-proxying the Shiny server:
+I decided to use nginx for reverse-proxying the Shiny server:
 
 **Installation**
 
@@ -244,9 +244,9 @@ server {
 
 I've created two scripts:
 
-- A local one (`deploy-app.sh`) with packs all the relevant assets into a ZIP file, then copies the resulting archive (using scp) to the AWS instance, and finally opens an ssh session to the server.
+- A local one (`deploy-app.sh`) which packs all the relevant assets into a ZIP file, then copies the resulting archive (using scp) to the AWS instance, and finally opens an ssh session to the server.
 
-- One in the server (`deploy.sh`) that I can run manually at the server, that:
+- Another script in the server (`deploy.sh`) that I can run manually, that:
   - Unzips the archive in the corresponding path (`/srv/shiny-server/biodiversity-dashboard/`)
   - Restarts the Shiny server
   - Restarts Nginx
@@ -255,9 +255,9 @@ This repository contains a template for one of the scripts [`deploy-app.sh_templ
 
 The script [`deploy.sh`](for_server/deploy.sh) is also included for simplicity.
 
-### Assigning a domain to the biodiversity-dashboard
+### Assigning a domain to the biodiversity dashboard
 
-I made use of one of my domains (`castagnetto.net`), and CloudFlare to be give a nicer name to the AWS server instance:
+I made use of one of my domains (`castagnetto.net`), and CloudFlare to give a nicer name to the AWS server instance:
 
 - Assigned the CloudFlare DNS servers for the domain
 - In CloudFlare
@@ -271,15 +271,15 @@ I made use of one of my domains (`castagnetto.net`), and CloudFlare to be give a
 
 ## Possible future enhancements
 
-Here are some enhancements/ideas to this visualization
+Here are some enhancements/ideas to improve this visualization
 
-- Add a way of filtering observations by the number of individuals observed: This could help people interested in, for, example migratory birds that might be observed in medium to large groups vs the occasional single individual observations.
+- Add a way of filtering observations by the number of individuals observed: This could help people interested in, for example, migratory birds that might be observed in medium to large groups vs the occasional single individual observations.
 
 - Normalize the scientific names: Usually the organism names follow the pattern "{species/variety name} ({taxonomist}, {year})", but some of the names in the dataset lack parentheses or do not follow fully this pattern.
 
 - Use region selections in the bar plot to filter for observations in the map: This will simplify the visualization and will no longer require the use of a range slider selector.
 
 - Store the whole dataset (currently ~70GB uncompressed) into a format allowing easy retrieval of data by country:
-  - It could done using a set of (`arrow`) parquet files partitioned by country and stored in S3, which could have undergone some simplification, normalization and augmentation to be ready for use in the visualization.
+  - It could be done using a set of (`arrow`) parquet files partitioned by country and stored in S3, which could have undergone some simplification, normalization and augmentation to be ready for use in the visualization.
   - It will require adding a way of selecting a country, and then programatically loading the data on demand.
   - *Note*: tried to do something along these lines, but I gathered it will take more time (and money) than I have budgeted for this visualization, to set up something like that on AWS.
