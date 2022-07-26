@@ -16,4 +16,4 @@ The images of the organisms used in the visualization, are obtained from the GBI
 
 - *Note*: The image URLs in the GBIF metadata (*vide supra*) might not include all the images that exist in the actual full reports.
 
-For those observations without an image in the GBIF metadata, I have used the Wikimedia Commons image from at https://commons.wikimedia.org/wiki/File:No_Image_Available.jpg (Col pr, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons)
+For those observations without an image in the GBIF metadata, I have used the Wikimedia Commons image from https://commons.wikimedia.org/wiki/File:No_Image_Available.jpg (Col pr, CC BY-SA 4.0 <https://creativecommons.org/licenses/by-sa/4.0>, via Wikimedia Commons)
