@@ -139,7 +139,7 @@ I've used `testthat` (not in package mode) to test for the succesful creation of
 The script used to run the tests is: `run-tests.R` and the indiviual tests are in `tests/test-barplot_by_sciname.R` and `test-plot_org_map.R`
 
 
-## Application deployment (Infrastructure Skill)
+## Application deployment
 
 ### Provisioning of an AWS EC2 instance
 
@@ -264,7 +264,7 @@ I made use of one of my domains (`castagnetto.net`), and CloudFlare to give a ni
 
 - Assigned the CloudFlare DNS servers for the domain
 - In CloudFlare
-  - Mapped using CNAME castagnetto.net -> ec2-A-B-D-D.compute-1.amazonaws.com
+  - Mapped using CNAME castagnetto.net -> ec2-A-B-C-D.compute-1.amazonaws.com
   - Set to:
     - Use flexlible SSL/TLS (between browser and CloudFlare)
     - Always use HTTPS
