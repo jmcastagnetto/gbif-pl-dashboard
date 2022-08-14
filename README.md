@@ -1,8 +1,6 @@
 # Biodiversity Observations in Poland
 
-Current (temporary) location: https://castagnetto.net (until 2022-08-13)
-
-Alternate (permanent) location: https://jesuscastagnetto.shinyapps.io/gbif-pl-dashboard/
+Current dashboard location: https://jesuscastagnetto.shinyapps.io/gbif-pl-dashboard/
 
 
 ## Description
